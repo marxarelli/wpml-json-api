@@ -24,6 +24,11 @@ class WPML_JSON_API_CategoryTranslation extends WPML_JSON_API_Translation {
    * @return JSON_API_Category
    */
   function resolve_resource() {
+    // Some ugly workaround for getting categories in other languages that 
+    // WPML makes us do.
+    global $icl_adjust_id_url_filter_off;
+    $icl_adjust_id_url_filter_off = true;
+
     $wp_cat = get_category($this->resource_id);
 
     if (!is_null($wp_cat)) {

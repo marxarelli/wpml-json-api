@@ -32,11 +32,7 @@ class WPML_JSON_API {
    * Registers all filters and actions.
    */
   function register() {
-    // Trick WPML by hardcoding the 'lang' GET parameter. Otherwise, it will 
-    // rewrite post queries to only return those in the default language. This 
-    // would interfere with the retrieval of explicitly requested JSON-API 
-    // objects.
-    $_GET['lang'] = 'all';
+    add_action('template_redirect', array($this, 'ensure_no_wpml_interference'), 5);
 
     add_filter('json_api_encode', array($this, 'dispatch_add_translations_filter'));
     add_filter('json_api_encode', array($this, 'dispatch_filter_for_language_filter'));
@@ -76,6 +72,42 @@ class WPML_JSON_API {
     }
 
     return $response;
+  }
+
+  /**
+   * Remove WPML hooks when in a JSON context. JSON objects are requested 
+   * explicitly and we don't want WPML interfering.
+   */
+  function ensure_no_wpml_interference() {
+    if ($this->json->query->get('json')) {
+      // Deregister WPML hooks that limit results to the detected language
+      // NOTE This is some ugly stuff, but I couldn't figure out a better way 
+      // to keep WPML from interfering.
+      remove_action('pre_get_posts', array($this->sp, 'pre_get_posts'));
+      remove_filter('get_pages', array($this->sp, 'exclude_other_language_pages2'));
+      remove_filter('get_term', array($this->sp,'get_term_adjust_id'), 1, 1);
+      remove_filter('get_terms', array($this->sp,'get_terms_filter'));
+      remove_filter('posts_join', array($this->sp,'posts_join_filter'));
+      remove_filter('posts_where', array($this->sp,'posts_where_filter'));
+      remove_filter('terms_clauses', array($this->sp, 'terms_clauses'));
+      remove_filter('query', array($this->sp, 'filter_queries'));
+      remove_filter('getarchives_join', array($this->sp,'getarchives_join'));
+      remove_filter('getarchives_where', array($this->sp,'getarchives_where'));
+      remove_filter('get_previous_post_join', array($this->sp,'get_adjacent_post_join'));
+      remove_filter('get_next_post_join', array($this->sp,'get_adjacent_post_join'));
+      remove_filter('get_previous_post_where', array($this->sp,'get_adjacent_post_where'));
+      remove_filter('get_next_post_where', array($this->sp,'get_adjacent_post_where'));
+      remove_filter('get_term', array($this->sp,'get_term_adjust_id'), 1, 1);
+      remove_filter('category_link', array($this->sp,'category_link_adjust_id'), 1, 2);
+      remove_filter('get_terms', array($this->sp,'get_terms_adjust_ids'), 1, 3);
+      remove_filter('get_pages', array($this->sp,'get_pages_adjust_ids'), 1, 2);
+      remove_action('parse_query', array($this->sp, 'parse_query'));
+      remove_action('wp_list_pages_excludes', array($this->sp, 'adjust_wp_list_pages_excludes'));
+      remove_filter("pre_term_name", array($this->sp, 'pre_term_name'), 1, 2);
+      remove_filter('the_category', array($this->sp,'the_category_name_filter'));
+      remove_filter('get_terms', array($this->sp,'get_terms_filter'));
+      remove_filter('get_the_terms', array($this->sp, 'get_the_terms_filter'), 10, 3);
+    }
   }
 
   /**

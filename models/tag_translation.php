@@ -24,6 +24,11 @@ class WPML_JSON_API_TagTranslation extends WPML_JSON_API_Translation {
    * @return JSON_API_Tag
    */
   function resolve_resource() {
+    // Some ugly workaround for getting categories in other languages that 
+    // WPML makes us do.
+    global $icl_adjust_id_url_filter_off;
+    $icl_adjust_id_url_filter_off = true;
+
     $wp_tag = get_term_by('id', $this->resource_id, 'post_tag');
 
     if (!is_null($wp_tag)) {
