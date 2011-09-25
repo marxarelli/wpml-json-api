@@ -111,8 +111,7 @@ class WPML_JSON_API {
   }
 
   /**
-   * Ensures that the plugin dependencies are fulfilled. If the WPML plugin is 
-   * enabled network wide than this plugin must be as well.
+   * Ensures that the plugin dependencies are fulfilled.
    */
   function ensure_plugin_dependencies($network_wide) {
     if (!is_plugin_active('json-api/json-api.php')) {
@@ -121,14 +120,6 @@ class WPML_JSON_API {
 
     if (!is_plugin_active('sitepress-multilingual-cms/sitepress.php')) {
       trigger_error('This plugin requires WPML Multilingual CMS!', E_USER_ERROR);
-    }
-    elseif (!$network_wide) {
-      $plugins = get_site_option('active_sitewide_plugins', array(), false);
-      if (is_plugin_active_for_network('sitepress-multilingual-cms/sitepress.php')) {
-        trigger_error(
-          'WPML Multilingual CMS is enabled network wide. '.
-          'You must enable this plugin network wide as well.', E_USER_ERROR);
-      }
     }
   }
 

@@ -4,10 +4,9 @@ Donate link: https://store.lettersandlight.org
 Tags: json, api, i18n, cms, wpml, multilingual, translation
 Requires at least: 2.8
 Tested up to: 3.2
-Stable tag: 0.0.2
+Stable tag: 0.1.0
 
-An extension to [JSON-API](http://wordpress.org/extend/plugins/json-api) for
-sites using the [WPML Multilingual CMS](http://wpml.org) plugin.
+An extension to JSON-API for sites using the WPML Multilingual CMS plugin.
 
 == Description ==
 
@@ -19,9 +18,6 @@ This plugin filters the response content of requests made to the WordPress [JSON
 
 1. Upload the `wpml-json-api` folder to the `/wp-content/plugins/` directory or install directly through the plugin installer.
 2. Activate the plugin through the 'Plugins' menu in WordPress or by using the link provided by the plugin installer.
-
-__Note__
-If the WPML plugin is enabled network wide, this plugin must be as well.
 
 == Usage ==
 
