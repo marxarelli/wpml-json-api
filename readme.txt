@@ -4,7 +4,7 @@ Donate link: https://store.lettersandlight.org
 Tags: json, api, i18n, cms, wpml, multilingual, translation
 Requires at least: 2.8
 Tested up to: 3.2
-Stable tag: 0.0.1
+Stable tag: 0.0.2
 
 An extension to [JSON-API](http://wordpress.org/extend/plugins/json-api) for
 sites using the [WPML Multilingual CMS](http://wpml.org) plugin.
@@ -20,6 +20,9 @@ This plugin filters the response content of requests made to the WordPress [JSON
 1. Upload the `wpml-json-api` folder to the `/wp-content/plugins/` directory or install directly through the plugin installer.
 2. Activate the plugin through the 'Plugins' menu in WordPress or by using the link provided by the plugin installer.
 
+__Note__
+If the WPML plugin is enabled network wide, this plugin must be as well.
+
 == Usage ==
 
 Please be familiar with the
@@ -28,11 +31,13 @@ Please be familiar with the
 1. Augmented response objects
    1.1. Language
    1.2. Translations
-2. Response object translation
-   1.1. Specifying target language
-   1.2. Translatable objects
-   1.3. Translatable properties
-   1.4. Default language
+2. Filtering response objects by language
+   2.1. Specifying the language
+   2.2. Filtered results
+3. Response object translation
+   3.1. Specifying the target language
+   3.2. Translated results
+   3.3. Translatable objects and properties
 
 == 1. Augmented response objects ==
 
@@ -147,6 +152,158 @@ All `category` objects will include the following.
 * `term_id` - Redundancy of `resource_id`.
 * `post_count` - The number of posts tagged with the translated category.
 
-== 2. Response object translation ==
+== 2. Filtering response objects by language ==
 
-(TODO)
+You may tell the API to only return objects for a specific language by using
+the `language` parameter.
+
+== 2.1. Specifying the language ==
+
+The `language` parameter should be one of the supported language codes.
+
+Example:
+
+* `http://wordpress.site.example/api/get_category_index/?language=es&dev=1`
+
+== 2.2. Filtered results ==
+
+Following is a example response to the example request in Section 2.1.
+
+    {
+      "status": "ok",
+      "count": 2,
+      "categories": [
+        {
+          "id": 13,
+          "slug": "noticias-de-ultima-hora-2",
+          "title": "Noticias de \u00daltima Hora",
+          "description": "",
+          "parent": 0,
+          "post_count": 1,
+          "translations": {
+            "en": {
+              "name": "Breaking News",
+              "term_id": 4,
+              "post_count": 2,
+              "id": 9,
+              "language_code": "en",
+              "is_original": true,
+              "resource_id": 4
+            },
+            "es": {
+              "name": "Noticias de \u00daltima Hora",
+              "term_id": 13,
+              "post_count": 1,
+              "id": 26,
+              "language_code": "es",
+              "is_original": false,
+              "resource_id": 13
+            }
+          },
+          "language": "es"
+        }
+      ]
+    }
+
+== 3. Response object translation ==
+
+You can request objects to be translated before they are returned. This may
+save you some requests if you have the slug or ID and just need the object in
+a specific language.
+
+== 3.1. Specifying the target language ==
+
+The target language can be specified by passing a `to_language` parameter. The
+value should be one of the supported language codes.
+
+Example:
+
+* `http://wordpress.site.example/api/get_page/?slug=the-best-page&to_language=es&dev=1`
+
+== 3.2. Translated results ==
+
+Following is an example response to the example request in Section 3.1.
+
+    {
+      "status": "ok",
+      "page": {
+        "id": 127,
+        "type": "page",
+        "slug": "la-pagina-mejor",
+        "url": "http:\/\/wordpress.site.example\/the-best-page\/",
+        "status": "publish",
+        "title": "La P\u00e1gina Mejor",
+        "title_plain": "La P\u00e1gina Mejor",
+        "content": "<p>Esta es la p\u00e1gina mejor se haya creado.<\/p>\n<blockquote><p>Best damn page ever. &#8211; Dan<\/p><\/blockquote>\n",
+        "excerpt": "Esta es la p\u00e1gina mejor se haya creado. Best damn page ever. &#8211; Dan",
+        "date": "2011-09-22 18:48:09",
+        "modified": "2011-09-22 18:54:55",
+        "categories": [],
+        "tags": [],
+        "author": {
+          "id": 4,
+          "slug": "dzachary",
+          "name": "Daniel Duvall",
+          "first_name": "Daniel",
+          "last_name": "Duvall",
+          "nickname": "Daniel Duvall",
+          "url": "",
+          "description": ""
+        },
+        "comments": [],
+        "attachments": [],
+        "comment_count": 0,
+        "comment_status": "open",
+        "translations": {
+          "en": {
+            "post_id": 127,
+            "post_title": "The Best Page",
+            "post_status": "publish",
+            "id": 21,
+            "language_code": "en",
+            "is_original": true,
+            "resource_id": 127
+          },
+          "es": {
+            "post_id": 131,
+            "post_title": "La P\u00e1gina Mejor",
+            "post_status": "publish",
+            "id": 22,
+            "language_code": "es",
+            "is_original": false,
+            "resource_id": 131
+          }
+        },
+        "language": "es",
+        "translated": true,
+        "original_slug": "the-best-page",
+        "original_title": "The Best Page",
+        "original_title_plain": "The Best Page"
+      }
+    }
+
+As you can see the `slug`, `title`, `title_plain`, `excerpt`, and `content`
+properties have been rewritten with the Spanish translation. In addition, the
+original properties have been prefixed with `original_`. This is always the
+case for all properties except for `excerpt` and `content`. In an effort to
+save on response size, the latter have been omitted.
+
+== 3.3. Translatable objects and properties ==
+
+Here are all of the translatable object types and their translatable
+properties, those that can be rewritten as described in Section 3.2.
+
+`post` and `page`:
+
+* `slug`
+* `title`
+* `title_plain`
+* `excerpt`
+* `content`
+
+`tag` and `category`:
+
+* `slug`
+* `title`
+* `description`
+
