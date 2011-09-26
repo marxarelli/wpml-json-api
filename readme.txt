@@ -4,7 +4,7 @@ Donate link: https://store.lettersandlight.org
 Tags: json, api, i18n, cms, wpml, multilingual, translation
 Requires at least: 2.8
 Tested up to: 3.2
-Stable tag: 0.1.0
+Stable tag: 0.1.2
 
 An extension to JSON-API for sites using the WPML Multilingual CMS plugin.
 
@@ -25,15 +25,15 @@ Please be familiar with the
 [JSON-API](http://wordpress.org/extend/plugins/json-api). 
 
 1. Augmented response objects
-   1.1. Language
-   1.2. Translations
+   * 1.1. Language
+   * 1.2. Translations
 2. Filtering response objects by language
-   2.1. Specifying the language
-   2.2. Filtered results
+   * 2.1. Specifying the language
+   * 2.2. Filtered results
 3. Response object translation
-   3.1. Specifying the target language
-   3.2. Translated results
-   3.3. Translatable objects and properties
+   * 3.1 Specifying the target language
+   * 3.2 Translated results
+   * 3.3 Translatable objects and properties
 
 == 1. Augmented response objects ==
 
@@ -42,8 +42,7 @@ Please be familiar with the
 After enabling the WPML JSON-API plugin, response objects will contain the
 language in which the object content was written.
 
-Let's take a look at an example response to a request made to
-`http://wordpress.site.example/api/get_page/?dev=1&id=127`.
+Let's take a look at an example response to a request made to `http://wordpress.site.example/api/get_page/?dev=1&id=127`.
 
     {
       "status": "ok",
@@ -289,7 +288,7 @@ save on response size, the latter have been omitted.
 Here are all of the translatable object types and their translatable
 properties, those that can be rewritten as described in Section 3.2.
 
-`post` and `page`:
+Objects `post` and `page`:
 
 * `slug`
 * `title`
@@ -297,9 +296,12 @@ properties, those that can be rewritten as described in Section 3.2.
 * `excerpt`
 * `content`
 
-`tag` and `category`:
+Objects `tag` and `category`:
 
 * `slug`
 * `title`
 * `description`
 
+== Changelog ==
+
+Please see the [GitHub project page](https://github.com/marxarelli/wpml-json-api) for a comprehensive list of changes.
