@@ -1,7 +1,7 @@
 <?php 
 /*
 Plugin Name: WPML JSON-API
-Description: Extends the JSON-API plugin within WPML multilingual functionality.
+Description: Extends the JSON-API plugin with WPML multilingual functionality.
 Author: Daniel Duvall
 Author URI: http://mutual.io
 Version: 0.1.0
