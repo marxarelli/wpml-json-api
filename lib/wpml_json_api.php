@@ -52,23 +52,23 @@ class WPML_JSON_API {
 
       $error = null;
 
-      // Resolve the object to filter and filter it.
+      // Resolve the objects to filter and filter them.
       foreach (array_keys($response) as $type) {
         if (is_object($response[$type])) {
           $resources = array($response[$type]);
           $error = $this->$filter($type, $resources);
-          break;
         }
         elseif (is_array($response[$type]) && isset($response[$type][0])) {
           if (is_object($response[$type][0])) {
             $error = $this->$filter($type, $response[$type]);
-            break;
           }
         }
-      }
 
-      // If there was an error, overwrite the response with it.
-      return is_null($error) ? $response : $error;
+        // If there was an error, overwrite the response with it.
+        if (!is_null($error)) {
+          return $error;
+        }
+      }
     }
 
     return $response;
