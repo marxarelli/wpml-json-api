@@ -3,7 +3,7 @@ Contributors: dzachary
 Donate link: https://store.lettersandlight.org
 Tags: json, api, i18n, cms, wpml, multilingual, translation
 Requires at least: 2.8
-Tested up to: 3.2
+Tested up to: 3.4
 Stable tag: 0.1.3
 
 An extension to JSON-API for sites using the WPML Multilingual CMS plugin.
