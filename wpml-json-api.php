@@ -9,7 +9,7 @@ Version: 0.1.3
 
 if (defined('WPML_JSON_API_VERSION')) return;
 
-define('WPML_JSON_API_VERSION', '0.1.3');
+define('WPML_JSON_API_VERSION', '0.1.4');
 define('WPML_JSON_API_PATH', dirname(__FILE__));
 
 require_once WPML_JSON_API_PATH.'/lib/wpml_json_api.php';
