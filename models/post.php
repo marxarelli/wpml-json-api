@@ -15,4 +15,19 @@ class WPML_JSON_API_Post extends WPML_JSON_API_Resource {
   );
   protected $type = 'post';
   protected $wpml_type = 'post_post';
+
+  /**
+   * Instantiates a new post resource. The wpml_type property is set according
+   * to any custom post type.
+   *
+   * @param mixed $resource Resource to extend.
+   */
+  function __construct($resource) {
+    parent::__construct($resource);
+
+    if (isset($resource->type)) {
+      $this->wpml_type = "post_{$resource->type}";
+    }
+  }
+
 }
